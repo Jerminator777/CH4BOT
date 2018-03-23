@@ -1,4 +1,5 @@
+import Bot
 class DrillingBot:
-	def __init__(self, symbol, position)
-		Entity.__init__(self,symbol,position,[20,20])
-		self.status = "Waiting"
+	def __init__(self, xposition, yposition):
+		Bot.Bot.__init__(self, xposition, yposition, 20, 20, "d")
+		self.status = "SearchStation"

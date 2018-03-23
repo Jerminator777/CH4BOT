@@ -1,5 +1,7 @@
 class Entity:
-	def __init__(self, symbol, position, size):
+	def __init__(self, Coordinates, symbol):
 		self.symbol = symbol
-		self.position = position
-		self.size = size
+		self.xposition = Coordinates[0]
+		self.yposition = Coordinates[1]
+		self.xsize = Coordinates[2]
+		self.ysize = Coordinates[3]

@@ -1,4 +1,5 @@
-text_file = open("Z:/DGOUV022/Documents/test.txt","r")		
+import Landfill
+text_file = open("./FieldParam.txt","r")		
 lines = []		
 for line in text_file:		
 	coord = line.split()	
@@ -9,7 +10,7 @@ for line in text_file:
 	coord_tup = tuple(coord)	
 	lines.append(coord_tup)	
 text_file.close()		
-d = {}		
+FieldParam = {}		
 for cat,x,y,dx,dy in lines:		
 	int_x = int(x)	
 	int_y = int(y)	
@@ -20,6 +21,9 @@ for cat,x,y,dx,dy in lines:
 	except ValueError:	
 		co = [int_x,int_y]
 	try:	
-		d[cat].append(co)
+		FieldParam[cat].append(co)
 	except KeyError:	
-		d[cat]=[co]			
+		FieldParam[cat]=[co]
+lf = Landfill.Landfill(FieldParam["track"], FieldParam["drill"], FieldParam["charge"], FieldParam["gas"], FieldParam["obstacle"], FieldParam["field"])
+for row in lf.shape:
+	print (row)
