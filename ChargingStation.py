@@ -15,5 +15,4 @@ class ChargingStation(Entity.Entity):
 		elif signal_type[0] == "Selection":
 			[xsel, ysel] = signal_type[1]
 			if [xsel, ysel] == [self.xposition, self.yposition]:		
-				self.status = "Reserved"
-				print("Reserved")	
+				self.status = "Reserved"	
