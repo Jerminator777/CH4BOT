@@ -12,7 +12,7 @@ class Bot(Entity.Entity):
 		self.Status = "pending"
 		
 	def UpdatePosition(self, dt): #Add checks
-		if(self.Status != "Charging")
+		if(self.Status != "Charging") and (self.Status != "WaitDrill")
 			dTargetx = self.Path[0][0] - self.xposition
 			dTargety = self.Path[0][1] - self.yposition
 			vx = Bot.Speed*dTargetx/math.sqrt(dTargetx**2+dTargety**2)
@@ -20,6 +20,16 @@ class Bot(Entity.Entity):
 			self.xposition += vx*dt
 			self.yposition += vy*dt
 			self.charge -= self.DischargeSpeed * dt
+			
+	def ChooseChargingStation(self, landfill):
+		self.status = "Station"
+		ClosestStation = self.PotentialStations[0]
+		for Station in self.PotentialStations:
+			if (math.sqrt((self.xposition - Station[1])**2+(self.xposition - Station[2])**2) < math.sqrt((self.xposition - ClosestStation[1])**2+(self.xposition - ClosestStation[2])**2):
+				ClosestStation = Station
+		landfill.TransmitSignal(["StationSelection", [ClosestStation[0]]])
+		self.Path.insert(0 , [ClosestStation[1], ClosestStation[2]])
+		self.PotentialStations = []
 		
 	def CheckObstacle(self, Obstacles):
 		dTargetx = self.Path[0][0] - self.xposition

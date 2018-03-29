@@ -9,6 +9,7 @@ class Landfill:
 		self.xmin = Outline[0][0]
 		self.ymax = Outline[0][1]
 		self.ymin = Outline[0][1]
+		
 		for corner in Outline:
 			self.xmax = max(self.xmax, corner[0])
 			self.xmin = min(self.xmin, corner[0])
@@ -17,22 +18,50 @@ class Landfill:
 		self.xmax = self.xmax - self.xmin
 		self.ymax = self.ymax - self.ymin
 		self.createShape(Outline)
+		idnumber = 1
 		self.TrackingBots = []
 		for position in TBots:
-			self.TrackingBots.append(TrackingBot.TrackingBot(position[0]-self.xmin, position[1]-self.ymin))
-		self.Obstacles = []
-		for block in Obstacles:
-			self.Obstacles.append(Entity.Entity([block[0]-self.xmin, block[1]-self.ymin, block[2], block[3]], "x"))
+			self.TrackingBots.append(TrackingBot.TrackingBot(position[0]-self.xmin, position[1]-self.ymin, idnumber))
+			idnumber += 1
+			
 		self.DrillingBots = []
 		for position in DBots:
-			self.DrillingBots.append(DrillingBot.DrillingBot(position[0]-self.xmin, position[1]-self.ymin))
+			self.DrillingBots.append(DrillingBot.DrillingBot(position[0]-self.xmin, position[1]-self.ymin, idnumber))
+			idnumber += 1
+			
 		self.ChargingStations = []
 		for position in CStations:
-			self.ChargingStations.append(ChargingStation.ChargingStation(position[0]-self.xmin, position[1]-self.ymin))
+			self.ChargingStations.append(ChargingStation.ChargingStation(position[0]-self.xmin, position[1]-self.ymin, idnumber))
+			idnumber += 1
+			
+		self.Obstacles = []
+		for block in Obstacles:
+			self.Obstacles.append(Entity.Entity([block[0]-self.xmin, block[1]-self.ymin, block[2], block[3]], "x", idnumber))
+			idnumber += 1
+			
 		self.GasPockets = Pockets
 		for pocket in self.GasPockets:
 			pocket[0]-=self.xmin
 			pocket[1]-=self.ymin
+			
+	def UpdateBots(self, dt): #Incomplete
+		for Bot in self.TrackingBots:
+			Bot.UpdatePosition(dt)
+			
+		for Bot in self.DrillingBots:
+			Bot.UpdatePosition(dt)
+	
+	def TransmitSignal(self, signal):
+		#TBC
+		for Bot in self.TrackingBots:
+			Bot.ReceiveSignal(signal)
+			
+		for Bot in self.DrillingBots:
+			Bot.ReceiveSignal(signal)
+			
+		for Station in self.ChargingStation:
+			Station.ReceiveSignal(signal)
+			
 	def createShape(self, Outline):
 		self.shape = [[0 for col in range(self.ymax+1)] for row in range(self.xmax+1)]
 		for i in range(len(Outline)):

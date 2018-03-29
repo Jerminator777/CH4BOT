@@ -13,7 +13,7 @@ text_file.close()
 FieldParam = {}		
 for cat,x,y,dx,dy in lines:		
 	int_x = int(x)	
-	int_y = int(y)	
+	int_y = int(y)
 	try:	
 		int_dx=int(dx)
 		int_dy=int(dy)

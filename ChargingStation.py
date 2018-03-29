@@ -4,14 +4,14 @@ class ChargingStation(Entity.Entity):
 		Entity.Entity.__init__(self, [xposition, yposition, 25, 25], "c", idnumber)
 		self.status = "Available"
 		
-	def Send_Availability(self, landfill, signal):
+	def SendAvailability(self, landfill, signal):
 	if self.status == "Available":
-		landfill.TransmitSignal(["Availability" , [signal[1][0], self.xposition, self.yposition]])
+		landfill.TransmitSignal(["Availability" , [signal[1][0], self.id, self.xposition, self.yposition]])
 		
-	def Receive_Signal(self, signal, landfill):
+	def ReceiveSignal(self, signal, landfill):
 		#signal is ["Signal Type" , [Content]]
 		if signal[0] == "StationRequest":
 			#For request signals, [Content] is [idumberOfRequester]
-			self.Send_Availability(landfill, signal)
+			self.SendAvailability(landfill, signal)
 		elif (signal[0] == "StationSelection") and (signal[1][0] == self.id):
 			self.status = "Reserved"
