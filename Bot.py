@@ -3,15 +3,15 @@ import Entity
 class Bot(Entity.Entity):
 	
 	Speed = 10
-	def __init__(self, xposition, yposition, xsize, ysize, symbol):
-		Entity.Entity.__init__(self, [xposition, yposition, xsize, ysize], symbol)
+	def __init__(self, xposition, yposition, xsize, ysize, symbol, idnumber):
+		Entity.Entity.__init__(self, [xposition, yposition, xsize, ysize], symbol, idnumber)
 		self.charge = 100
 		self.TargetPosition = []
 		self.Path = []
 		self.DischargeSpeed = Bot.Speed/1800
 		self.Status = "pending"
 		
-	def UpdatePosition(self, dt):
+	def UpdatePosition(self, dt): #Add checks
 		if(self.Status != "Charging")
 			dTargetx = self.Path[0][0] - self.xposition
 			dTargety = self.Path[0][1] - self.yposition
@@ -24,11 +24,11 @@ class Bot(Entity.Entity):
 	def CheckObstacle(self, Obstacles):
 		dTargetx = self.Path[0][0] - self.xposition
 		dTargety = self.Path[0][1] - self.yposition
-		dx = -5*dTargetx/math.sqrt(dTargetx**2+dTargety**2)
-		dy = -5*dTargety/math.sqrt(dTargetx**2+dTargety**2)
-		CheckPoint = self.Path[0]
+		dx = 5*dTargetx/math.sqrt(dTargetx**2+dTargety**2)
+		dy = 5*dTargety/math.sqrt(dTargetx**2+dTargety**2)
+		CheckPoint = [self.xposition + self.xsize/2 , self.yposition + self.ysize/2]
 		CheckPointList = [Checkpoint]
-		for i in range(math.trunc(math.sqrt(dTargetx**2+dTargety**2))):
+		for i in range(6):
 			CheckPoint[0] += dx
 			CheckPoint[1] += dy
 			CheckPointList.append(CheckPoint)
