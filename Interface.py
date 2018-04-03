@@ -25,6 +25,7 @@ plt.savefig('LandfillMap.png',bbox_inches='tight')
 
 
 #SECTION FOR CREATING PYTHON WINDOW
+#the landfill shape is turned into black and white .png and used as background image of window
 #initializing window screen, screen background, and refresh time
 clock = pygame.time.Clock()
 background = pygame.image.load("LandfillMap.png")
