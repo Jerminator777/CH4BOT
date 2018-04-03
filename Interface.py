@@ -33,10 +33,9 @@ background_size = background.get_rect().size
 screen = pygame.display.set_mode(background_size)
 pygame.display.set_caption("Simulation Window")
 
-#getting ratio to scale icons of entities (so that entity icon takes up one square of background)
-ratio = []
-ratio.append(int(int(background_size[0])/int(landfill_size[0])))
-ratio.append(int(int(background_size[1])/int(landfill_size[1])))
+#import charging station icon and re-size to meet background element ratio
+picture = pygame.image.load("ChargingStation.png")
+picture_size = picture.get_rect().size
 
 #loop for refreshing window
 while True:	
