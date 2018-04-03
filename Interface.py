@@ -33,6 +33,11 @@ background_size = background.get_rect().size
 screen = pygame.display.set_mode(background_size)
 pygame.display.set_caption("Simulation Window")
 
+#getting ratio to scale icons of entities (so that entity icon takes up one square of background)
+ratio = []
+ratio.append(int(int(background_size[0])/int(landfill_size[0])))
+ratio.append(int(int(background_size[1])/int(landfill_size[1])))
+
 #loop for refreshing window
 while True:	
 	clock.tick(10) #controls how fast screen updates
