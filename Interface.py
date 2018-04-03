@@ -11,7 +11,7 @@ landfill_temp = [[0,0,0,0,0,0,0,0,0],
 		[0,0,1,1,1,1,1,1,0],
 		[0,0,0,0,0,0,1,1,0],
 		[0,0,0,0,0,0,0,0,0]]
-landfill_size = [len(landfill_temp),len(landfill_temp[0])]
+landfill_size = [len(landfill_temp[0]),len(landfill_temp)]  #[length,height]
 				 
 #invert colours (black=1,white=0)
 landfill_invert	= numpy.logical_not(landfill_temp).astype(int)
@@ -29,13 +29,18 @@ plt.savefig('LandfillMap.png',bbox_inches='tight')
 #initializing window screen, screen background, and refresh time
 clock = pygame.time.Clock()
 background = pygame.image.load("LandfillMap.png")
-background_size = background.get_rect().size
+background_size = background.get_rect().size        #(length,height)
 screen = pygame.display.set_mode(background_size)
 pygame.display.set_caption("Simulation Window")
 
+#getting dimensions of one element in matrix using background image dimensions and binary matrix dimensions
+ratio = []
+ratio.append(int(int(background_size[0])/int(landfill_size[0])))
+ratio.append(int(int(background_size[1])/int(landfill_size[1])))
+
 #import charging station icon and re-size to meet background element ratio
 picture = pygame.image.load("ChargingStation.png")
-picture_size = picture.get_rect().size
+picture = pygame.transform.scale(picture, ratio)
 
 #loop for refreshing window
 while True:	
