@@ -7,10 +7,10 @@ import pygame
 WINDOW
 #Assuming landfill "map" comes in lists of binary lists
 landfill_temp = [[0,0,0,0,0,0,0,0,0],
-				 [0,0,1,1,1,0,1,1,0],
-				 [0,0,1,1,1,1,1,1,0],
-				 [0,0,0,0,0,0,1,1,0],
-				 [0,0,0,0,0,0,0,0,0]]
+		[0,0,1,1,1,0,1,1,0],
+		[0,0,1,1,1,1,1,1,0],
+		[0,0,0,0,0,0,1,1,0],
+		[0,0,0,0,0,0,0,0,0]]
 				 
 #invert colours (black=1,white=0)
 landfill_invert	= numpy.logical_not(landfill_temp).astype(int)
