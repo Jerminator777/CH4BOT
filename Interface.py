@@ -41,9 +41,11 @@ ratio.append(int(int(background_size[1])/int(landfill_size[1])))
 #import charging station icon and re-size to meet background element ratio
 picture = pygame.image.load("ChargingStation.png")
 picture = pygame.transform.scale(picture, ratio)
+picture_rect = picture.get_rect()                #creates border around icon. move border in While loop to move icon.
 
 #loop for refreshing window
 while True:	
 	clock.tick(10) #controls how fast screen updates
 	screen.blit(background, (0,0))
+	screen.blit(picture, (2*ratio[0],2*ratio[1]))
 	pygame.display.flip()
