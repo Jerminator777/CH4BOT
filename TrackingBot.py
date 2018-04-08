@@ -55,7 +55,7 @@ class TrackingBot(Bot.Bot):
 		
 		if self.status == "GoStation":
 			self.UpdatePosition(dt)
-			if (self.StationPosition[0]- self.xposition < 1) and (self.StationPosition[1] - self.yposition < 1):
+			if (abs(self.StationPosition[0]- self.xposition) < 1) and (abs(self.StationPosition[1] - self.yposition) < 1):
 				self.status = "Charging"
 			self.CheckObstacle(landfill.Obstacles)
 		
@@ -69,12 +69,12 @@ class TrackingBot(Bot.Bot):
 			self.charge = min(100, self.charge + 3 * self.DischargeSpeed * dt)
 			if self.charge == 100 :
 				self.status = "Tracking"
-				landfill.TransmitSignal("FreeStation", [self.StationId])
+				landfill.TransmitSignal(["FreeStation", [self.StationId]])
 				self.StationId = 0
 			
 	def VerifyPockets(self, landfill):
 		for Pocket in landfill.GasPockets:
-			if (math.sqrt((self.xposition - Pocket[0])**2+(self.yposition - Pocket[1])**2) < Bot.Bot.DetectionRange):
+			if (math.sqrt((self.xposition - Pocket[0])**2+(self.yposition - Pocket[1])**2) < Bot.Bot.DetectionRange - 1):
 				self.status = "FindDrill"
 				landfill.TransmitSignal(["DrillingRequest" , [self.id]])
 			
@@ -88,6 +88,7 @@ class TrackingBot(Bot.Bot):
 			self.PotentialStations.append([signal[1][1], signal[1][2], signal[1][3]])
 			
 		elif (signal[0] == "FreeTBot") and (signal[1][0] == self.id):
+			print("Hello")
 			self.status = "Tracking"
 	
 	def ChooseDrill(self, landfill):
@@ -97,7 +98,7 @@ class TrackingBot(Bot.Bot):
 			for Drill in self.PotentialDrills:
 				if ((self.xposition - Drill[1])**2+(self.yposition - Drill[2])**2 < (self.xposition - ClosestDrill[1])**2+(self.yposition - ClosestDrill[2])**2):
 					ClosestDrill = Drill
-			landfill.TransmitSignal(["DrillSelection", [ClosestDrill[0], self.xposition, self.yposition]])
+			landfill.TransmitSignal(["DrillSelection", [ClosestDrill[0], self.id, self.xposition, self.yposition]])
 			self.PotentialDrills = []
 		else :
 			landfill.TransmitSignal(["DrillingRequest" , [self.id]])

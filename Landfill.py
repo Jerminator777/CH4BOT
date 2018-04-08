@@ -24,6 +24,12 @@ class Landfill:
 			self.TrackingBots.append(TrackingBot.TrackingBot(position[0]-self.xmin, position[1]-self.ymin, idnumber))
 			idnumber += 1
 			
+			xs = 0
+		for i in range(len(self.TrackingBots)):
+			xe = math.trunc((i+1) * self.xmax / len(self.TrackingBots))
+			self.TrackingBots[i].CreatePath(xs, xe, self.shape)
+			xs = xe
+				
 		self.DrillingBots = []
 		for position in DBots:
 			self.DrillingBots.append(DrillingBot.DrillingBot(position[0]-self.xmin, position[1]-self.ymin, idnumber))
@@ -46,21 +52,21 @@ class Landfill:
 			
 	def UpdateBots(self, dt): #Incomplete
 		for Bot in self.TrackingBots:
-			Bot.UpdatePosition(dt)
+			Bot.Update(self, dt)
 			
 		for Bot in self.DrillingBots:
-			Bot.UpdatePosition(dt)
+			Bot.Update(self, dt)
 	
 	def TransmitSignal(self, signal):
 		#TBC
 		for Bot in self.TrackingBots:
-			Bot.ReceiveSignal(signal)
+			Bot.ReceiveSignal(signal, self)
 			
 		for Bot in self.DrillingBots:
-			Bot.ReceiveSignal(signal)
+			Bot.ReceiveSignal(signal, self)
 			
-		for Station in self.ChargingStation:
-			Station.ReceiveSignal(signal)
+		for Station in self.ChargingStations:
+			Station.ReceiveSignal(signal, self)
 			
 	def createShape(self, Outline):
 		self.shape = [[0 for col in range(self.ymax+1)] for row in range(self.xmax+1)]
