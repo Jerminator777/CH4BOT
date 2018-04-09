@@ -3,7 +3,7 @@ import math
 class DrillingBot(Bot.Bot):
 	def __init__(self, xposition, yposition, idnumber):
 		Bot.Bot.__init__(self, xposition, yposition, 2, 2, "d", idnumber)
-		self.status = "SearchStation"
+		self.status = "init"
 		self.DischargeSpeed = Bot.Bot.Speed/90
 		self.PotentialStations = []
 		
@@ -29,6 +29,11 @@ class DrillingBot(Bot.Bot):
 			if (abs(self.StationPosition[0]- self.xposition) < 1) and (abs(self.StationPosition[1] - self.yposition) < 1):
 				self.status = "Charging"
 			self.CheckObstacle(landfill.Obstacles)
+		
+		if self.status == "init":
+			self.ChooseChargingStation(landfill)
+			self.status = "SearchStation"
+		
 			
 		if self.status == "SearchStation":
 			self.ChooseChargingStation(landfill)

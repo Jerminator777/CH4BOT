@@ -3,6 +3,8 @@ import numpy as np
 import pygame
 import Landfill
 
+pygame.init()
+
 text_file = open("./FieldParam.txt","r")		
 lines = []		
 for line in text_file:		
@@ -44,6 +46,7 @@ ratio = int(1000/background_size[1])
 background = pygame.transform.scale(background, [ratio*background_size[0], ratio*background_size[1]])
 background_size = background.get_rect().size        #(length,height)
 screen = pygame.display.set_mode(background_size)
+screen_rect = screen.get_rect()
 pygame.display.set_caption("Simulation Window")
 
 #getting dimensions of one element in matrix using background image dimensions and binary matrix dimensions
@@ -60,12 +63,32 @@ while len(lf.GasPockets) > 0:#loop for refreshing window
 	clock.tick() #controls how fast screen updates
 	lf.UpdateBots(clock.get_time()/1000)
 	screen.blit(background, (0,0))
-	for station in lf.ChargingStations :
-		screen.blit(StationIcon, (int(station.xposition * ratio-7), int(station.yposition * ratio-7)))
+	levelfont=pygame.font.SysFont("monospace",16)
+	n=0
 	for TBot in lf.TrackingBots :
 		screen.blit(TrackingIcon, (int(TBot.xposition * ratio-7), int(TBot.yposition * ratio-7)))
+		leveldisplay = levelfont.render("Tracking Robot   ID"+str(TBot.id)+" "+str(int(TBot.charge))+"% "+TBot.status, 1, (255,0,0))
+		leveldisplay_rect = leveldisplay.get_rect()
+		leveldisplay_rect.top = screen_rect.top
+		leveldisplay_rect.left = screen_rect.right -400
+		screen.blit(leveldisplay, (leveldisplay_rect.left,leveldisplay_rect.top+n,leveldisplay_rect.right,leveldisplay_rect.bottom)) 
+		n += 20 
 	for DBot in lf.DrillingBots :
 		screen.blit(DrillingIcon, (int(DBot.xposition * ratio-7), int(DBot.yposition * ratio-7)))
+		leveldisplay = levelfont.render("Drilling Robot   ID"+str(DBot.id)+" "+str(int(DBot.charge))+"% "+DBot.status, 1, (255,0,0))
+		leveldisplay_rect = leveldisplay.get_rect()
+		leveldisplay_rect.top = screen_rect.top
+		leveldisplay_rect.left = screen_rect.right -400
+		screen.blit(leveldisplay, (leveldisplay_rect.left,leveldisplay_rect.top+n,leveldisplay_rect.right,leveldisplay_rect.bottom)) 
+		n += 20 
+	for station in lf.ChargingStations :
+		screen.blit(StationIcon, (int(station.xposition * ratio-7), int(station.yposition * ratio-7)))
+		leveldisplay = levelfont.render("Charging Station ID"+str(station.id)+"     "+station.status, 1, (255,0,0))
+		leveldisplay_rect = leveldisplay.get_rect()
+		leveldisplay_rect.top = screen_rect.top
+		leveldisplay_rect.left = screen_rect.right -400
+		screen.blit(leveldisplay, (leveldisplay_rect.left,leveldisplay_rect.top+n,leveldisplay_rect.right,leveldisplay_rect.bottom)) 
+		n += 20 
 	for Obstacle in lf.Obstacles :
 		screen.blit(pygame.transform.scale(ObstacleIcon, [Obstacle.xsize * ratio, Obstacle.ysize * ratio]), (int((Obstacle.xposition - Obstacle.xsize/2) * ratio), int((Obstacle.yposition - Obstacle.ysize/2) * ratio)))
 	for Pocket in lf.GasPockets :
