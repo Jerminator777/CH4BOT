@@ -6,6 +6,7 @@ class TrackingBot(Bot.Bot):
 		self.status = "nPath"
 		self.PotentialDrills = []
 		self.PotentialStations = []
+		self.EndFlag = 0
 		
 	def CreatePath(self, xstart, xfinish, shape): #this creates a full path
 		direction = 1
@@ -46,12 +47,17 @@ class TrackingBot(Bot.Bot):
 	
 	def Update(self, landfill, dt):
 		if self.status == "Tracking":
-			self.UpdatePosition(dt)
-			self.VerifyPockets(landfill)
-			self.CheckObstacle(landfill.Obstacles)
-			if (self.charge < 20) and (self.status != "FindDrill"):
+			if len(self.Path) == 0:
+				self.EndFlag = 1
 				self.status = "SearchStation"
-				landfill.TransmitSignal(["StationRequest" , [self.id]])
+			else:
+				self.UpdatePosition(dt)
+				self.VerifyPockets(landfill)
+				self.CheckObstacle(landfill.Obstacles)
+				if (self.charge < 20) and (self.status != "FindDrill"):
+					self.status = "SearchStation"
+					landfill.TransmitSignal(["StationRequest" , [self.id]])
+			
 		
 		if self.status == "GoStation":
 			self.UpdatePosition(dt)
@@ -67,7 +73,7 @@ class TrackingBot(Bot.Bot):
 						
 		if self.status == "Charging":
 			self.charge = min(100, self.charge + 3 * self.DischargeSpeed * dt)
-			if self.charge == 100 :
+			if self.charge == 100 and self.EndFlag == 0:
 				self.status = "Tracking"
 				landfill.TransmitSignal(["FreeStation", [self.StationId]])
 				self.StationId = 0
