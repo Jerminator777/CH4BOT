@@ -1,9 +1,0 @@
-field 5 10
-field 20 50
-field 20 10
-track 15 15
-track 20 15
-drill 10 10
-charge 15 15
-gas 25 25
-obstacle 10 45 3 3
