@@ -1,0 +1,17 @@
+field 0 0
+field 600 0
+field 700 400
+field 0 400
+track 150 150
+track 200 150
+drill 100 100
+drill 300 300
+charge 150 150
+charge 450 150
+charge 550 250
+gas 50 200
+gas 250 250
+gas 100 300
+gas 600 350
+obstacle 100 250 10 15
+obstacle 50 100 20 20
