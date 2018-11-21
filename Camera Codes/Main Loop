@@ -18,7 +18,7 @@ while True:
 	if False == ret:
 		break
 	hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-	mask = cv2.inRange(hsv_image, lower_yellow, upper_yellow)
+	mask = cv2.inRange(hsv_image, lower_orange, upper_orange)
 	mask_binary = numpy.sign(mask)
 	mask_graph = Graph.Graph(len(mask), len(mask[0]), mask_binary)
 	mask_masses = mask_graph.countIslands().countIslands()
