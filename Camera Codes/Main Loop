@@ -1,0 +1,43 @@
+# angular horizontal +/- 8 degrees (0.14 rad)
+# angular vertical  +/- 6 degrees (0.105 rad)
+import cv2
+import time
+import numpy
+import itertools
+import Graph
+h = 1  #needs to be determined from physical system
+x0 = 1 #needs to be determined from physical system
+cam_id = [0, 1, 2, 3]
+cam_id_cycle = itertools.cycle(cam_id)
+cam_num = next(cam_id_cycle)
+while True:
+	cap = cv2.VideoCapture(cam_num)
+	ret, image = cap.read()
+	if False == ret:
+		break
+	hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+	mask = cv2.inRange(hsv_image, lower_yellow, upper_yellow)
+	mask_binary = numpy.sign(mask)
+	mask_graph = Graph.Graph(len(mask), len(mask[0]), mask_binary)
+	mask_masses = mask_graph.countIslands().countIslands()
+	mask_masses_vetted = [masses for masses in mask_masses if len(masses) >= 100]
+	if [] == mask_masses_vetted:
+		cam_num = next(cam_id_cycle)
+		continue
+	R = 0.105/len(image)	
+	centroid_x = []
+	centroid_y = []
+	centroid_theta = []
+	for mass in mask_masses_vetted:
+		y = [coordinates[0] for coordinates in mass]
+		cy = int(sum(y) / len(mass))
+		c_y = h*tan(0.105+(R*cy))
+		x = [coordinates[0] for coordinates in mass]
+		cx = int(sum(x) / len(mass))
+		c_x = x0 + numpy.sign(cx-len(image[0]))*c_y*tan(0.14)
+		theta = numpy.arctan(c_x/c_y)
+		centroid_x.append(c_x)
+		centroid_y.append(c_y)
+		centroid_theta.append(theta)
+	cam_num = next(cam_id_cycle)
+	mask_graph = None	
