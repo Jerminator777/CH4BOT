@@ -7,6 +7,8 @@ import itertools
 import Graph
 h = 1  #needs to be determined from physical system
 x0 = 1 #needs to be determined from physical system
+lower_orange = numpy.array([15,50,50])
+upper_orange = numpy.array([20,100,100])
 cam_id = [0, 1, 2, 3]
 cam_id_cycle = itertools.cycle(cam_id)
 cam_num = next(cam_id_cycle)
